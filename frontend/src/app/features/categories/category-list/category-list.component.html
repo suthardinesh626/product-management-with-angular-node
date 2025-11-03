@@ -1,0 +1,105 @@
+<div class="page-header">
+  <h2>Categories Management</h2>
+  <button class="btn btn-success" (click)="openCreateModal()">+ Add Category</button>
+</div>
+
+<div class="alert alert-success" *ngIf="successMessage">{{ successMessage }}</div>
+<div class="alert alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+<div class="card">
+  <div class="loading" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading categories...</p>
+  </div>
+
+  <div class="table-container" *ngIf="!isLoading">
+    <table *ngIf="categories.length > 0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Products</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let category of categories">
+          <td>{{ category.name }}</td>
+          <td>{{ category.description || '-' }}</td>
+          <td>{{ category.product_count || 0 }}</td>
+          <td>
+            <span class="badge" [class.badge-active]="category.is_active" [class.badge-inactive]="!category.is_active">
+              {{ category.is_active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-sm btn-primary" (click)="openEditModal(category)">Edit</button>
+              <button class="btn-sm btn-danger" (click)="deleteCategory(category)">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="no-data" *ngIf="categories.length === 0">
+      <p>No categories found</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ isEditMode ? 'Edit Category' : 'Create Category' }}</h3>
+      <button class="btn-close" (click)="closeModal()">×</button>
+    </div>
+
+    <form (ngSubmit)="saveCategory()" #categoryForm="ngForm">
+      <div class="form-group">
+        <label class="form-label" for="name">Category Name *</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          class="form-control"
+          [(ngModel)]="category.name"
+          required
+          #nameInput="ngModel"
+        />
+        <div class="form-error" *ngIf="nameInput.invalid && nameInput.touched">
+          Category name is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="description">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          class="form-control"
+          [(ngModel)]="category.description"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="is_active" [(ngModel)]="category.is_active" />
+          <span>Active</span>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="categoryForm.invalid">
+          {{ isEditMode ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

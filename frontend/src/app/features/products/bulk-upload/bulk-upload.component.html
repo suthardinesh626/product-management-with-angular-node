@@ -1,0 +1,129 @@
+<div class="page-header">
+  <h2>Bulk Product Upload</h2>
+</div>
+
+<div class="card">
+  <div class="upload-instructions">
+    <h3>Instructions</h3>
+    <ol>
+      <li>Download the template file (CSV or Excel format)</li>
+      <li>Fill in the product details following the template format</li>
+      <li>Upload the completed file</li>
+      <li>Wait for the processing to complete</li>
+    </ol>
+    
+    <div class="template-download">
+      <p><strong>Download Template:</strong></p>
+      <div class="flex gap-2">
+        <button class="btn btn-outline" (click)="downloadTemplate('xlsx')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          Download Excel Template
+        </button>
+        <button class="btn btn-outline" (click)="downloadTemplate('csv')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+          Download CSV Template
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <h3>Upload File</h3>
+
+  <div class="alert alert-success" *ngIf="successMessage">{{ successMessage }}</div>
+  <div class="alert alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="upload-area">
+    <div class="file-input-wrapper">
+      <input
+        type="file"
+        id="fileInput"
+        accept=".csv,.xlsx,.xls"
+        (change)="onFileSelected($event)"
+        [disabled]="isUploading"
+      />
+      <label for="fileInput" class="file-input-label">
+        <div class="upload-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <p *ngIf="!selectedFile">Click to select a file or drag and drop</p>
+        <p *ngIf="selectedFile"><strong>Selected:</strong> {{ selectedFile.name }}</p>
+      </label>
+    </div>
+
+    <button
+      class="btn btn-primary btn-large"
+      (click)="uploadFile()"
+      [disabled]="!selectedFile || isUploading"
+    >
+      <span *ngIf="!isUploading">Upload File</span>
+      <span *ngIf="isUploading">Uploading...</span>
+    </button>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-container" *ngIf="isUploading || uploadProgress > 0">
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="uploadProgress"></div>
+    </div>
+    <p class="progress-text">{{ uploadProgress.toFixed(0) }}% Complete</p>
+  </div>
+
+  <!-- Job Status -->
+  <div class="job-status" *ngIf="jobStatus">
+    <h4>Upload Status</h4>
+    <div class="status-details">
+      <div class="status-item">
+        <span class="status-label">Status:</span>
+        <span class="status-value" [class.status-success]="jobStatus.state === 'completed'"
+              [class.status-warning]="jobStatus.state === 'active'"
+              [class.status-error]="jobStatus.state === 'failed'">
+          {{ jobStatus.state?.toUpperCase() }}
+        </span>
+      </div>
+      <div class="status-item" *ngIf="jobStatus.result">
+        <span class="status-label">Total Products:</span>
+        <span class="status-value">{{ jobStatus.result.totalProducts }}</span>
+      </div>
+      <div class="status-item" *ngIf="jobStatus.result">
+        <span class="status-label">Processed:</span>
+        <span class="status-value status-success">{{ jobStatus.result.processedCount }}</span>
+      </div>
+      <div class="status-item" *ngIf="jobStatus.result && jobStatus.result.errorCount > 0">
+        <span class="status-label">Errors:</span>
+        <span class="status-value status-error">{{ jobStatus.result.errorCount }}</span>
+      </div>
+    </div>
+
+    <!-- Error Details -->
+    <div class="error-details" *ngIf="jobStatus.result?.errors?.length > 0">
+      <h5>Error Details (First 10):</h5>
+      <ul>
+        <li *ngFor="let error of jobStatus.result.errors.slice(0, 10)">
+          Row {{ error.row }}: {{ error.error }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="form-actions" *ngIf="!isUploading && (successMessage || errorMessage)">
+    <button class="btn btn-secondary" (click)="reset()">Upload Another File</button>
+  </div>
+</div>
+

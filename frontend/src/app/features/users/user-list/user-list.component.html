@@ -1,0 +1,143 @@
+<div class="page-header">
+  <h2>Users Management</h2>
+  <button class="btn btn-success" (click)="openCreateModal()">+ Add User</button>
+</div>
+
+<div class="alert alert-success" *ngIf="successMessage">{{ successMessage }}</div>
+<div class="alert alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+<div class="card">
+  <div class="loading" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading users...</p>
+  </div>
+
+  <div class="table-container" *ngIf="!isLoading">
+    <table *ngIf="users.length > 0">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.email }}</td>
+          <td>{{ user.name || '-' }}</td>
+          <td>
+            <span class="badge badge-role">{{ user.role.toUpperCase() }}</span>
+          </td>
+          <td>
+            <span class="badge" [class.badge-active]="user.is_active" [class.badge-inactive]="!user.is_active">
+              {{ user.is_active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>{{ user.created_at | date:'short' }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-sm btn-primary" (click)="openEditModal(user)">Edit</button>
+              <button class="btn-sm btn-danger" (click)="deleteUser(user)">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="no-data" *ngIf="users.length === 0">
+      <p>No users found</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ isEditMode ? 'Edit User' : 'Create User' }}</h3>
+      <button class="btn-close" (click)="closeModal()">×</button>
+    </div>
+
+    <form (ngSubmit)="saveUser()" #userForm="ngForm">
+      <div class="form-group">
+        <label class="form-label" for="email">Email *</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-control"
+          [(ngModel)]="user.email"
+          required
+          email
+          #emailInput="ngModel"
+        />
+        <div class="form-error" *ngIf="emailInput.invalid && emailInput.touched">
+          Please enter a valid email
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="name">Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          class="form-control"
+          [(ngModel)]="user.name"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">
+          Password {{ isEditMode ? '(leave blank to keep current)' : '*' }}
+        </label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="form-control"
+          [(ngModel)]="user.password"
+          [required]="!isEditMode"
+          minlength="6"
+          #passwordInput="ngModel"
+        />
+        <div class="form-error" *ngIf="passwordInput.invalid && passwordInput.touched">
+          Password must be at least 6 characters
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="role">Role</label>
+        <select
+          id="role"
+          name="role"
+          class="form-control"
+          [(ngModel)]="user.role"
+        >
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="is_active" [(ngModel)]="user.is_active" />
+          <span>Active</span>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
+          {{ isEditMode ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

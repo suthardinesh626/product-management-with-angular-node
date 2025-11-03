@@ -1,0 +1,200 @@
+.upload-instructions {
+  background-color: #f0f7ff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.upload-instructions h3 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.upload-instructions ol {
+  margin-left: 20px;
+  line-height: 2;
+}
+
+.template-download {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--divider-color);
+}
+
+.template-download .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.template-download .btn svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.template-download .btn:hover svg {
+  transform: translateY(-2px);
+}
+
+.upload-area {
+  margin: 30px 0;
+}
+
+.file-input-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.file-input-wrapper input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.file-input-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  border: 2px dashed var(--primary-color);
+  border-radius: 8px;
+  background-color: #f9fafb;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-input-label:hover {
+  background-color: var(--primary-light);
+  border-color: var(--primary-dark);
+}
+
+.upload-icon {
+  margin-bottom: 10px;
+  color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.file-input-label:hover .upload-icon {
+  transform: translateY(-4px);
+  color: var(--primary-dark);
+}
+
+.upload-icon svg {
+  display: block;
+}
+
+.btn-large {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+}
+
+.progress-container {
+  margin: 30px 0;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 30px;
+  background-color: var(--divider-color);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  transition: width 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-text {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+.job-status {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+}
+
+.job-status h4 {
+  margin-bottom: 15px;
+  color: var(--primary-color);
+}
+
+.status-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.status-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.status-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.status-success {
+  color: var(--success-color);
+}
+
+.status-warning {
+  color: var(--warning-color);
+}
+
+.status-error {
+  color: var(--danger-color);
+}
+
+.error-details {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #ffebee;
+  border-radius: 4px;
+  border-left: 4px solid var(--danger-color);
+}
+
+.error-details h5 {
+  color: var(--danger-color);
+  margin-bottom: 10px;
+}
+
+.error-details ul {
+  margin-left: 20px;
+}
+
+.error-details li {
+  color: #c62828;
+  margin-bottom: 5px;
+}
+
+.form-actions {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--divider-color);
+}
+

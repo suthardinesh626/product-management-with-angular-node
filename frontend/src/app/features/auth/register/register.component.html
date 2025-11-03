@@ -1,0 +1,89 @@
+<div class="auth-container">
+  <div class="auth-card card">
+    <div class="auth-header">
+      <h2>Create Account</h2>
+      <p>Register for a new account</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <div class="alert alert-error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="name">Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          class="form-control"
+          [(ngModel)]="name"
+          placeholder="Enter your name"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-control"
+          [(ngModel)]="email"
+          required
+          email
+          #emailInput="ngModel"
+          placeholder="Enter your email"
+        />
+        <div class="form-error" *ngIf="emailInput.invalid && emailInput.touched">
+          Please enter a valid email address
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="form-control"
+          [(ngModel)]="password"
+          required
+          minlength="6"
+          #passwordInput="ngModel"
+          placeholder="Enter your password"
+        />
+        <div class="form-error" *ngIf="passwordInput.invalid && passwordInput.touched">
+          Password must be at least 6 characters
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          class="form-control"
+          [(ngModel)]="confirmPassword"
+          required
+          placeholder="Confirm your password"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        [disabled]="registerForm.invalid || isLoading"
+      >
+        <span *ngIf="!isLoading">Register</span>
+        <span *ngIf="isLoading">Registering...</span>
+      </button>
+
+      <div class="auth-footer">
+        <p>Already have an account? <a routerLink="/login">Sign in here</a></p>
+      </div>
+    </form>
+  </div>
+</div>
+

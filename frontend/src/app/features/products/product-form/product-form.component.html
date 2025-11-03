@@ -1,0 +1,134 @@
+<div class="page-header">
+  <h2>{{ isEditMode ? 'Edit Product' : 'Create Product' }}</h2>
+</div>
+
+<div class="card">
+  <div class="alert alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <form (ngSubmit)="onSubmit()" #productForm="ngForm">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="name">Product Name *</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          class="form-control"
+          [(ngModel)]="product.name"
+          required
+          #nameInput="ngModel"
+          placeholder="Enter product name"
+        />
+        <div class="form-error" *ngIf="nameInput.invalid && nameInput.touched">
+          Product name is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="category_id">Category *</label>
+        <select
+          id="category_id"
+          name="category_id"
+          class="form-control"
+          [(ngModel)]="product.category_id"
+          required
+          #categoryInput="ngModel"
+        >
+          <option value="0" disabled>Select a category</option>
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+        <div class="form-error" *ngIf="categoryInput.invalid && categoryInput.touched">
+          Please select a category
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        class="form-control"
+        [(ngModel)]="product.description"
+        placeholder="Enter product description"
+      ></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="price">Price *</label>
+        <input
+          type="number"
+          id="price"
+          name="price"
+          class="form-control"
+          [(ngModel)]="product.price"
+          required
+          min="0"
+          step="0.01"
+          #priceInput="ngModel"
+          placeholder="0.00"
+        />
+        <div class="form-error" *ngIf="priceInput.invalid && priceInput.touched">
+          Price is required and must be positive
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="stock_quantity">Stock Quantity</label>
+        <input
+          type="number"
+          id="stock_quantity"
+          name="stock_quantity"
+          class="form-control"
+          [(ngModel)]="product.stock_quantity"
+          min="0"
+          placeholder="0"
+        />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="image">Product Image</label>
+      <input
+        type="file"
+        id="image"
+        name="image"
+        class="form-control"
+        accept="image/*"
+        (change)="onFileSelected($event)"
+      />
+      <div class="image-preview" *ngIf="imagePreview">
+        <img [src]="imagePreview" alt="Product preview" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          name="is_active"
+          [(ngModel)]="product.is_active"
+        />
+        <span>Active</span>
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="productForm.invalid || isLoading"
+      >
+        <span *ngIf="!isLoading">{{ isEditMode ? 'Update' : 'Create' }}</span>
+        <span *ngIf="isLoading">Saving...</span>
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
+

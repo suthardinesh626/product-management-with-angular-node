@@ -1,0 +1,170 @@
+<div class="page-header">
+  <h2>Products Management</h2>
+  <div class="header-actions">
+    <button class="btn btn-success" routerLink="/dashboard/products/create">+ Add Product</button>
+    <button class="btn btn-primary" routerLink="/dashboard/products/bulk-upload">Bulk Upload</button>
+  </div>
+</div>
+
+<div class="alert alert-success" *ngIf="successMessage">{{ successMessage }}</div>
+<div class="alert alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+<div class="card">
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filter-group">
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()"
+        placeholder="Search products..."
+      />
+      <button class="btn btn-primary" (click)="onSearch()">Search</button>
+    </div>
+
+    <div class="filter-group">
+      <select class="form-control" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+        <option value="">All Categories</option>
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <button class="btn btn-outline" (click)="downloadReport('xlsx')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        Export XLSX
+      </button>
+      <button class="btn btn-outline" (click)="downloadReport('csv')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <line x1="9" y1="15" x2="15" y2="15"/>
+        </svg>
+        Export CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading products...</p>
+  </div>
+
+  <!-- Products Table -->
+  <div class="table-container" *ngIf="!isLoading">
+    <table *ngIf="products.length > 0">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th (click)="onSort('name')" style="cursor: pointer;" class="sortable-header">
+            <span class="header-content">
+              Name
+              <svg *ngIf="sortBy === 'name' && sortOrder === 'ASC'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"/>
+              </svg>
+              <svg *ngIf="sortBy === 'name' && sortOrder === 'DESC'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </span>
+          </th>
+          <th>Category</th>
+          <th (click)="onSort('price')" style="cursor: pointer;" class="sortable-header">
+            <span class="header-content">
+              Price
+              <svg *ngIf="sortBy === 'price' && sortOrder === 'ASC'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"/>
+              </svg>
+              <svg *ngIf="sortBy === 'price' && sortOrder === 'DESC'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </span>
+          </th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td>
+            <img
+              *ngIf="product.image"
+              [src]="product.image.startsWith('http') ? product.image : 'http://localhost:3000' + product.image"
+              alt="{{ product.name }}"
+              class="product-image"
+            />
+            <span *ngIf="!product.image" class="no-image">No Image</span>
+          </td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.category?.name || 'N/A' }}</td>
+          <td>${{ product.price }}</td>
+          <td>{{ product.stock_quantity }}</td>
+          <td>
+            <span class="badge" [class.badge-active]="product.is_active" [class.badge-inactive]="!product.is_active">
+              {{ product.is_active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-sm btn-primary" [routerLink]="['/dashboard/products/edit', product.id]">
+                Edit
+              </button>
+              <button class="btn-sm btn-danger" (click)="deleteProduct(product)">
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="no-data" *ngIf="products.length === 0">
+      <p>No products found</p>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button
+      class="btn btn-secondary"
+      (click)="onPageChange(currentPage - 1)"
+      [disabled]="currentPage === 1"
+    >
+      Previous
+    </button>
+
+    <button
+      *ngFor="let page of getPages()"
+      class="btn"
+      [class.btn-primary]="page === currentPage"
+      [class.btn-secondary]="page !== currentPage"
+      (click)="onPageChange(page)"
+    >
+      {{ page }}
+    </button>
+
+    <button
+      class="btn btn-secondary"
+      (click)="onPageChange(currentPage + 1)"
+      [disabled]="currentPage === totalPages"
+    >
+      Next
+    </button>
+
+    <span class="pagination-info">
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalItems) }} of {{ totalItems }} products
+    </span>
+  </div>
+</div>
+
