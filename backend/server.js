@@ -56,16 +56,16 @@ const PORT = process.env.PORT || 3000;
 sequelize
   .authenticate()
   .then(() => {
-    console.log('✅ Database connection established successfully.');
+    console.log('Database connection established successfully.');
     return sequelize.sync({ alter: false }); // Use migrations instead
   })
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
+      console.log(`Server is running on port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.error('❌ Unable to connect to the database:', err);
+    console.error('Unable to connect to the database:', err);
     process.exit(1);
   });
 
