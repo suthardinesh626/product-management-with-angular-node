@@ -20,9 +20,9 @@ Product.belongsTo(Category, {
 const syncDatabase = async (options = {}) => {
   try {
     await sequelize.sync(options);
-    console.log('✅ Database synced successfully');
+    console.log(' Database synced successfully');
   } catch (error) {
-    console.error('❌ Error syncing database:', error);
+    console.error('Error syncing database:', error);
     throw error;
   }
 };
