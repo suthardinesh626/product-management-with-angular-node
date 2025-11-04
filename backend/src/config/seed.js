@@ -2,7 +2,7 @@ require('dotenv').config();
 const { User, Category, Product } = require('../models');
 
 const seedDatabase = async () => {
-  console.log('🌱 Starting database seeding...\n');
+  console.log('Starting database seeding...');
 
   try {
     // Create admin user
@@ -133,10 +133,10 @@ const seedDatabase = async () => {
     ]);
     console.log('✓ 6 sample products created');
 
-    console.log('\n✅ Database seeding completed successfully!');
-    console.log('\n📝 Login credentials:');
-    console.log('   Admin: admin@example.com / admin123');
-    console.log('   User:  user@example.com / user123\n');
+    console.log(' Database seeding completed successfully!');
+    console.log(' Login credentials:');
+    console.log('Admin: admin@example.com / admin123');
+    console.log('User:  user@example.com / user123');
 
     process.exit(0);
   } catch (error) {

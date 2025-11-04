@@ -2,7 +2,7 @@ require('dotenv').config();
 const { Product } = require('../models');
 
 const updateProductImages = async () => {
-  console.log('🖼️  Updating product images...\n');
+  console.log('Updating product images...');
 
   try {
     // Define image mappings for products
@@ -41,16 +41,16 @@ const updateProductImages = async () => {
       );
       
       if (result[0] > 0) {
-        console.log(`✓ Updated image for: ${update.name}`);
+        console.log(`Updated image for: ${update.name}`);
       } else {
-        console.log(`⚠ Product not found: ${update.name}`);
+        console.log(`Product not found: ${update.name}`);
       }
     }
 
-    console.log('\n✅ Product images updated successfully!\n');
+    console.log('Product images updated successfully!');
     process.exit(0);
   } catch (error) {
-    console.error('\n❌ Update failed:', error.message);
+    console.error('Update failed:', error.message);
     console.error(error.stack);
     process.exit(1);
   }
