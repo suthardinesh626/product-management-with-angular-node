@@ -71,7 +71,8 @@ const seedDatabase = async () => {
           description: 'High-performance laptop with latest processor',
           price: 999.99,
           category_id: electronicsId,
-          stock_quantity: 50
+          stock_quantity: 50,
+          image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=400&fit=crop'
         }
       }),
       Product.findOrCreate({
@@ -81,7 +82,8 @@ const seedDatabase = async () => {
           description: 'Latest smartphone with amazing camera',
           price: 699.99,
           category_id: electronicsId,
-          stock_quantity: 100
+          stock_quantity: 100,
+          image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop'
         }
       }),
       Product.findOrCreate({
@@ -91,7 +93,8 @@ const seedDatabase = async () => {
           description: 'Premium noise-cancelling headphones',
           price: 199.99,
           category_id: electronicsId,
-          stock_quantity: 75
+          stock_quantity: 75,
+          image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop'
         }
       }),
       Product.findOrCreate({
@@ -101,7 +104,8 @@ const seedDatabase = async () => {
           description: 'Comfortable cotton t-shirt',
           price: 19.99,
           category_id: clothingId,
-          stock_quantity: 200
+          stock_quantity: 200,
+          image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop'
         }
       }),
       Product.findOrCreate({
@@ -111,7 +115,8 @@ const seedDatabase = async () => {
           description: 'Classic blue denim jeans',
           price: 49.99,
           category_id: clothingId,
-          stock_quantity: 150
+          stock_quantity: 150,
+          image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop'
         }
       }),
       Product.findOrCreate({
@@ -121,7 +126,8 @@ const seedDatabase = async () => {
           description: 'Learn advanced programming concepts',
           price: 39.99,
           category_id: booksId,
-          stock_quantity: 80
+          stock_quantity: 80,
+          image: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&h=400&fit=crop'
         }
       })
     ]);
