@@ -3,8 +3,6 @@ import { successResponse, errorResponse, paginatedResponse } from '../utils/resp
 import { Op } from 'sequelize';
 import fs from 'fs';
 import path from 'path';
-import csv from 'csv-parser';
-import ExcelJS from 'exceljs';
 import { uploadProductsQueue } from '../queues/product.queue.js';
 
 export const getAllProducts = async (req, res) => {
