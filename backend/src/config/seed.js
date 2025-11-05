@@ -31,7 +31,6 @@ const seedDatabase = async () => {
     });
     console.log('✓ Regular user created');
 
-    // Create categories
     console.log('\nCreating categories...');
     const categories = await Promise.all([
       Category.findOrCreate({
@@ -57,7 +56,6 @@ const seedDatabase = async () => {
     ]);
     console.log('✓ 5 categories created');
 
-    // Create sample products
     console.log('\nCreating sample products...');
     const electronicsId = categories[0][0].id;
     const clothingId = categories[1][0].id;
@@ -66,7 +64,6 @@ const seedDatabase = async () => {
     const sportsId = categories[4][0].id;
 
     await Promise.all([
-      // Electronics Products
       Product.findOrCreate({
         where: { name: 'Laptop Computer' },
         defaults: {
@@ -156,7 +153,6 @@ const seedDatabase = async () => {
         }
       }),
 
-      // Clothing Products
       Product.findOrCreate({
         where: { name: 'T-Shirt' },
         defaults: {
@@ -235,7 +231,6 @@ const seedDatabase = async () => {
         }
       }),
 
-      // Books Products
       Product.findOrCreate({
         where: { name: 'Programming Book' },
         defaults: {
@@ -292,7 +287,6 @@ const seedDatabase = async () => {
         }
       }),
 
-      // Home & Garden Products
       Product.findOrCreate({
         where: { name: 'Table Lamp' },
         defaults: {
@@ -349,7 +343,6 @@ const seedDatabase = async () => {
         }
       }),
 
-      // Sports Products
       Product.findOrCreate({
         where: { name: 'Yoga Mat' },
         defaults: {

@@ -15,11 +15,9 @@ import {
   changePasswordValidator
 } from '../validators/auth.validator.js';
 
-// Public routes
 router.post('/register', registerValidator, validate, register);
 router.post('/login', loginValidator, validate, login);
 
-// Protected routes
 router.get('/profile', authenticate, getProfile);
 router.put('/profile', authenticate, updateProfile);
 router.put('/change-password', authenticate, changePasswordValidator, validate, changePassword);

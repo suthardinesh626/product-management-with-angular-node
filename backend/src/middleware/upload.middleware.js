@@ -24,7 +24,6 @@ const imageStorage = multer.diskStorage({
   }
 });
 
-// Storage configuration for bulk upload files
 const bulkStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(uploadDir, 'bulk'));
@@ -35,7 +34,6 @@ const bulkStorage = multer.diskStorage({
   }
 });
 
-// File filter for images
 const imageFileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|gif|webp/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());

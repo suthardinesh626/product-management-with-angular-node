@@ -22,14 +22,11 @@ export const getAllProducts = async (req, res) => {
     const offset = (page - 1) * limit;
     const where = {};
 
-    // Search filter (product name or category name)
     if (search) {
       where.name = { [Op.iLike]: `%${search}%` };
     }
 
-    // Category filter
     if (category) {
-      // Check if it's a category ID or name
       const categoryRecord = await Category.findOne({
         where: {
           [Op.or]: [
@@ -45,19 +42,16 @@ export const getAllProducts = async (req, res) => {
       }
     }
 
-    // Price range filter
     if (minPrice || maxPrice) {
       where.price = {};
       if (minPrice) where.price[Op.gte] = parseFloat(minPrice);
       if (maxPrice) where.price[Op.lte] = parseFloat(maxPrice);
     }
 
-    // Active status filter
     if (is_active !== undefined) {
       where.is_active = is_active === 'true';
     }
 
-    // Validate sort field
     const allowedSortFields = ['name', 'price', 'created_at', 'stock_quantity'];
     const sortField = allowedSortFields.includes(sortBy) ? sortBy : 'created_at';
     const order = sortOrder.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
@@ -115,13 +109,11 @@ export const createProduct = async (req, res) => {
   try {
     const { name, description, price, category_id, stock_quantity } = req.body;
 
-    // Verify category exists
     const category = await Category.findByPk(category_id);
     if (!category) {
       return errorResponse(res, 'Category not found', 404);
     }
 
-    // Handle image upload
     const image = req.file ? `/uploads/images/${req.file.filename}` : null;
 
     const product = await Product.create({
@@ -133,7 +125,6 @@ export const createProduct = async (req, res) => {
       image
     });
 
-    // Fetch with category info
     const productWithCategory = await Product.findByPk(product.id, {
       include: [{
         model: Category,
@@ -145,7 +136,6 @@ export const createProduct = async (req, res) => {
     return successResponse(res, productWithCategory, 'Product created successfully', 201);
   } catch (error) {
     console.error('Create product error:', error);
-    // Clean up uploaded file if product creation fails
     if (req.file) {
       fs.unlinkSync(req.file.path);
     }
@@ -163,7 +153,6 @@ export const updateProduct = async (req, res) => {
       return errorResponse(res, 'Product not found', 404);
     }
 
-    // Verify category if being updated
     if (category_id && category_id !== product.category_id) {
       const category = await Category.findByPk(category_id);
       if (!category) {
@@ -171,9 +160,7 @@ export const updateProduct = async (req, res) => {
       }
     }
 
-    // Handle image upload
     if (req.file) {
-      // Delete old image if exists
       if (product.image) {
         const oldImagePath = path.join(__dirname, '../../', product.image);
         if (fs.existsSync(oldImagePath)) {
@@ -183,7 +170,6 @@ export const updateProduct = async (req, res) => {
       product.image = `/uploads/images/${req.file.filename}`;
     }
 
-    // Update product
     if (name !== undefined) product.name = name;
     if (description !== undefined) product.description = description;
     if (price !== undefined) product.price = price;
@@ -193,7 +179,6 @@ export const updateProduct = async (req, res) => {
 
     await product.save();
 
-    // Fetch with category info
     const productWithCategory = await Product.findByPk(product.id, {
       include: [{
         model: Category,
@@ -205,7 +190,6 @@ export const updateProduct = async (req, res) => {
     return successResponse(res, productWithCategory, 'Product updated successfully');
   } catch (error) {
     console.error('Update product error:', error);
-    // Clean up uploaded file if update fails
     if (req.file) {
       fs.unlinkSync(req.file.path);
     }
@@ -222,7 +206,6 @@ export const deleteProduct = async (req, res) => {
       return errorResponse(res, 'Product not found', 404);
     }
 
-    // Delete image if exists
     if (product.image) {
       const imagePath = path.join(__dirname, '../../', product.image);
       if (fs.existsSync(imagePath)) {
@@ -248,7 +231,6 @@ export const bulkUpload = async (req, res) => {
     const filePath = req.file.path;
     const fileExtension = path.extname(req.file.originalname).toLowerCase();
 
-    // Add job to queue for background processing
     const job = await uploadProductsQueue.add({
       filePath,
       fileType: fileExtension,

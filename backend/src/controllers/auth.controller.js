@@ -6,13 +6,11 @@ export const register = async (req, res) => {
   try {
     const { email, password, name } = req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return errorResponse(res, 'Email already registered', 400);
     }
 
-    // Create new user
     const user = await User.create({
       email,
       password,
@@ -36,18 +34,15 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return errorResponse(res, 'Invalid credentials', 401);
     }
 
-    // Check if user is active
     if (!user.is_active) {
       return errorResponse(res, 'Account is inactive', 403);
     }
 
-    // Verify password
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       return errorResponse(res, 'Invalid credentials', 401);
@@ -79,7 +74,6 @@ export const updateProfile = async (req, res) => {
     const { name, email } = req.body;
     const user = req.user;
 
-    // Check if email is being changed and already exists
     if (email && email !== user.email) {
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
@@ -87,7 +81,6 @@ export const updateProfile = async (req, res) => {
       }
     }
 
-    // Update user
     if (name) user.name = name;
     if (email) user.email = email;
 
@@ -105,13 +98,11 @@ export const changePassword = async (req, res) => {
     const { currentPassword, newPassword } = req.body;
     const user = req.user;
 
-    // Verify current password
     const isPasswordValid = await user.comparePassword(currentPassword);
     if (!isPasswordValid) {
       return errorResponse(res, 'Current password is incorrect', 400);
     }
 
-    // Update password
     user.password = newPassword;
     await user.save();
 

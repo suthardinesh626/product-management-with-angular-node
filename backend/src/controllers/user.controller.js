@@ -15,7 +15,6 @@ export const getAllUsers = async (req, res) => {
     const offset = (page - 1) * limit;
     const where = {};
 
-    // Search filter
     if (search) {
       where[Op.or] = [
         { email: { [Op.iLike]: `%${search}%` } },
@@ -23,12 +22,10 @@ export const getAllUsers = async (req, res) => {
       ];
     }
 
-    // Role filter
     if (role) {
       where.role = role;
     }
 
-    // Active status filter
     if (is_active !== undefined) {
       where.is_active = is_active === 'true';
     }
@@ -74,13 +71,11 @@ export const createUser = async (req, res) => {
   try {
     const { email, password, name, role } = req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return errorResponse(res, 'Email already registered', 400);
     }
 
-    // Create new user
     const user = await User.create({
       email,
       password,
@@ -105,7 +100,6 @@ export const updateUser = async (req, res) => {
       return errorResponse(res, 'User not found', 404);
     }
 
-    // Check if email is being changed and already exists
     if (email && email !== user.email) {
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
@@ -113,7 +107,6 @@ export const updateUser = async (req, res) => {
       }
     }
 
-    // Update user
     if (name !== undefined) user.name = name;
     if (email !== undefined) user.email = email;
     if (role !== undefined) user.role = role;
@@ -137,7 +130,6 @@ export const deleteUser = async (req, res) => {
       return errorResponse(res, 'User not found', 404);
     }
 
-    // Prevent deleting own account
     if (user.id === req.user.id) {
       return errorResponse(res, 'Cannot delete your own account', 400);
     }

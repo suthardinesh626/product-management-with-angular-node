@@ -16,7 +16,6 @@ export const generateProductReport = async (req, res) => {
 
     const where = {};
 
-    // Apply filters
     if (search) {
       where.name = { [Op.iLike]: `%${search}%` };
     }
@@ -47,7 +46,6 @@ export const generateProductReport = async (req, res) => {
       where.is_active = is_active === 'true';
     }
 
-    // Fetch products with streaming approach
     const products = await Product.findAll({
       where,
       include: [{
@@ -60,14 +58,11 @@ export const generateProductReport = async (req, res) => {
     });
 
     if (format === 'csv') {
-      // Generate CSV
       res.setHeader('Content-Type', 'text/csv');
       res.setHeader('Content-Disposition', 'attachment; filename=products-report.csv');
 
-      // Write header
       res.write('Product ID,Product Name,Description,Price,Category,Stock Quantity,Status,Created At\n');
 
-      // Write data rows
       for (const product of products) {
         const row = [
           product.unique_id,
@@ -84,7 +79,6 @@ export const generateProductReport = async (req, res) => {
 
       res.end();
     } else {
-      // Generate XLSX
       const workbook = new ExcelJS.stream.xlsx.WorkbookWriter({
         stream: res
       });
@@ -94,7 +88,6 @@ export const generateProductReport = async (req, res) => {
 
       const worksheet = workbook.addWorksheet('Products');
 
-      // Define columns
       worksheet.columns = [
         { header: 'Product ID', key: 'unique_id', width: 38 },
         { header: 'Product Name', key: 'name', width: 30 },
@@ -107,7 +100,6 @@ export const generateProductReport = async (req, res) => {
         { header: 'Created At', key: 'created_at', width: 20 }
       ];
 
-      // Style header row
       worksheet.getRow(1).font = { bold: true };
       worksheet.getRow(1).fill = {
         type: 'pattern',
@@ -115,7 +107,6 @@ export const generateProductReport = async (req, res) => {
         fgColor: { argb: 'FFD3D3D3' }
       };
 
-      // Write data rows
       for (const product of products) {
         worksheet.addRow({
           unique_id: product.unique_id,
@@ -130,7 +121,6 @@ export const generateProductReport = async (req, res) => {
         }).commit();
       }
 
-      // Add summary row
       worksheet.addRow({});
       const summaryRow = worksheet.addRow({
         unique_id: 'TOTAL PRODUCTS',
@@ -155,7 +145,6 @@ export const downloadSampleTemplate = async (req, res) => {
   try {
     const { format = 'xlsx' } = req.query;
 
-    // Fetch categories for reference
     const categories = await Category.findAll({
       attributes: ['id', 'name', 'unique_id'],
       where: { is_active: true }
@@ -165,10 +154,8 @@ export const downloadSampleTemplate = async (req, res) => {
       res.setHeader('Content-Type', 'text/csv');
       res.setHeader('Content-Disposition', 'attachment; filename=product-upload-template.csv');
 
-      // Header
       res.write('name,description,price,category_id,stock_quantity\n');
       
-      // Sample row
       if (categories.length > 0) {
         res.write(`Sample Product,Sample Description,99.99,${categories[0].id},100\n`);
       } else {
@@ -181,7 +168,6 @@ export const downloadSampleTemplate = async (req, res) => {
       const worksheet = workbook.addWorksheet('Products');
       const categoriesSheet = workbook.addWorksheet('Categories Reference');
 
-      // Products sheet
       worksheet.columns = [
         { header: 'name', key: 'name', width: 30 },
         { header: 'description', key: 'description', width: 40 },
@@ -197,7 +183,6 @@ export const downloadSampleTemplate = async (req, res) => {
         fgColor: { argb: 'FFD3D3D3' }
       };
 
-      // Add sample data
       if (categories.length > 0) {
         worksheet.addRow({
           name: 'Sample Product',
@@ -208,7 +193,6 @@ export const downloadSampleTemplate = async (req, res) => {
         });
       }
 
-      // Categories reference sheet
       categoriesSheet.columns = [
         { header: 'Category ID', key: 'id', width: 15 },
         { header: 'Category Name', key: 'name', width: 30 },

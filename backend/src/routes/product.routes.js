@@ -17,17 +17,14 @@ import {
   updateProductValidator
 } from '../validators/product.validator.js';
 
-// All routes require authentication
 router.use(authenticate);
 
-// Product CRUD operations
 router.get('/', getAllProducts);
 router.get('/:id', getProductById);
 router.post('/', uploadImage.single('image'), createProductValidator, validate, createProduct);
 router.put('/:id', uploadImage.single('image'), updateProductValidator, validate, updateProduct);
 router.delete('/:id', deleteProduct);
 
-// Bulk operations
 router.post('/bulk/upload', uploadBulk.single('file'), bulkUpload);
 router.get('/bulk/status/:jobId', getBulkUploadStatus);
 

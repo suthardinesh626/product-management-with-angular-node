@@ -50,7 +50,6 @@ const User = sequelize.define('users', {
   }
 });
 
-// Instance methods
 User.prototype.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };

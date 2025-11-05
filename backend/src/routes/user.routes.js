@@ -11,10 +11,8 @@ import { authenticate, authorize } from '../middleware/auth.middleware.js';
 import { validate } from '../middleware/validation.middleware.js';
 import { registerValidator } from '../validators/auth.validator.js';
 
-// All routes require authentication
 router.use(authenticate);
 
-// User CRUD operations
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);
 router.post('/', authorize('admin'), registerValidator, validate, createUser);

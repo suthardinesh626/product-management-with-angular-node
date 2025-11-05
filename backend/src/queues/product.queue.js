@@ -4,7 +4,6 @@ import csv from 'csv-parser';
 import ExcelJS from 'exceljs';
 import fs from 'fs';
 
-// Create queue
 const uploadProductsQueue = new Queue('product-upload', {
   redis: {
     host: process.env.REDIS_HOST || 'localhost',
@@ -12,7 +11,6 @@ const uploadProductsQueue = new Queue('product-upload', {
   }
 });
 
-// Process queue jobs
 uploadProductsQueue.process(async (job) => {
   const { filePath, fileType } = job.data;
   
@@ -22,9 +20,7 @@ uploadProductsQueue.process(async (job) => {
     let errorCount = 0;
     const errors = [];
 
-    // Parse file based on type
     if (fileType === '.csv') {
-      // Process CSV
       await new Promise((resolve, reject) => {
         fs.createReadStream(filePath)
           .pipe(csv())
@@ -35,7 +31,6 @@ uploadProductsQueue.process(async (job) => {
           .on('error', reject);
       });
     } else if (fileType === '.xlsx' || fileType === '.xls') {
-      // Process Excel
       const workbook = new ExcelJS.Workbook();
       await workbook.xlsx.readFile(filePath);
       const worksheet = workbook.worksheets[0];
@@ -56,7 +51,6 @@ uploadProductsQueue.process(async (job) => {
       });
     }
 
-    // Process products in batches
     const batchSize = 100;
     const totalProducts = products.length;
 
@@ -65,7 +59,6 @@ uploadProductsQueue.process(async (job) => {
       
       for (const productData of batch) {
         try {
-          // Validate required fields
           if (!productData.name || !productData.price || !productData.category_id) {
             errors.push({
               row: i + batch.indexOf(productData) + 2,
@@ -75,7 +68,6 @@ uploadProductsQueue.process(async (job) => {
             continue;
           }
 
-          // Verify category exists
           const category = await Category.findByPk(productData.category_id);
           if (!category) {
             errors.push({
@@ -86,7 +78,6 @@ uploadProductsQueue.process(async (job) => {
             continue;
           }
 
-          // Create product
           await Product.create({
             name: productData.name,
             description: productData.description || null,
@@ -106,11 +97,9 @@ uploadProductsQueue.process(async (job) => {
         }
       }
 
-      // Update progress
       job.progress((i + batch.length) / totalProducts * 100);
     }
 
-    // Clean up uploaded file
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
@@ -120,11 +109,10 @@ uploadProductsQueue.process(async (job) => {
       totalProducts: products.length,
       processedCount,
       errorCount,
-      errors: errors.slice(0, 50) // Limit error messages
+      errors: errors.slice(0, 50)
     };
 
   } catch (error) {
-    // Clean up uploaded file
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
@@ -133,7 +121,6 @@ uploadProductsQueue.process(async (job) => {
   }
 });
 
-// Queue event handlers
 uploadProductsQueue.on('completed', (job, result) => {
   console.log(`Job ${job.id} completed successfully:`, result);
 });

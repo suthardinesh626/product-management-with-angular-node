@@ -14,7 +14,6 @@ export const getAllCategories = async (req, res) => {
     const offset = (page - 1) * limit;
     const where = {};
 
-    // Search filter
     if (search) {
       where[Op.or] = [
         { name: { [Op.iLike]: `%${search}%` } },
@@ -22,7 +21,6 @@ export const getAllCategories = async (req, res) => {
       ];
     }
 
-    // Active status filter
     if (is_active !== undefined) {
       where.is_active = is_active === 'true';
     }
@@ -40,7 +38,6 @@ export const getAllCategories = async (req, res) => {
       }]
     });
 
-    // Add product count to each category
     const categoriesWithCount = categories.map(cat => {
       const category = cat.toJSON();
       category.product_count = category.products?.length || 0;
@@ -111,7 +108,6 @@ export const updateCategory = async (req, res) => {
       return errorResponse(res, 'Category not found', 404);
     }
 
-    // Update category
     if (name !== undefined) category.name = name;
     if (description !== undefined) category.description = description;
     if (is_active !== undefined) category.is_active = is_active;
@@ -134,7 +130,6 @@ export const deleteCategory = async (req, res) => {
       return errorResponse(res, 'Category not found', 404);
     }
 
-    // Check if category has products
     const productCount = await Product.count({ where: { category_id: id } });
     if (productCount > 0) {
       return errorResponse(res, 'Cannot delete category with existing products', 400);

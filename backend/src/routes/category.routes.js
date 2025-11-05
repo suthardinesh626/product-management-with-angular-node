@@ -14,10 +14,8 @@ import {
   updateCategoryValidator
 } from '../validators/category.validator.js';
 
-// All routes require authentication
 router.use(authenticate);
 
-// Category CRUD operations
 router.get('/', getAllCategories);
 router.get('/:id', getCategoryById);
 router.post('/', createCategoryValidator, validate, createCategory);

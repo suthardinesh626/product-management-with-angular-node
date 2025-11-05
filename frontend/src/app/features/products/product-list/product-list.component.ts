@@ -28,8 +28,6 @@ export class ProductListComponent implements OnInit {
   pageSize = 10;
   totalPages = 0;
   totalItems = 0;
-
-  // Make Math available in template
   Math = Math;
 
   constructor(
