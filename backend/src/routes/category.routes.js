@@ -1,18 +1,18 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {
+import {
   getAllCategories,
   getCategoryById,
   createCategory,
   updateCategory,
   deleteCategory
-} = require('../controllers/category.controller');
-const { authenticate } = require('../middleware/auth.middleware');
-const { validate } = require('../middleware/validation.middleware');
-const {
+} from '../controllers/category.controller.js';
+import { authenticate } from '../middleware/auth.middleware.js';
+import { validate } from '../middleware/validation.middleware.js';
+import {
   createCategoryValidator,
   updateCategoryValidator
-} = require('../validators/category.validator');
+} from '../validators/category.validator.js';
 
 // All routes require authentication
 router.use(authenticate);
@@ -24,5 +24,5 @@ router.post('/', createCategoryValidator, validate, createCategory);
 router.put('/:id', updateCategoryValidator, validate, updateCategory);
 router.delete('/:id', deleteCategory);
 
-module.exports = router;
+export default router;
 

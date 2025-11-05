@@ -1,8 +1,8 @@
-const { Category, Product } = require('../models');
-const { successResponse, errorResponse, paginatedResponse } = require('../utils/response.util');
-const { Op } = require('sequelize');
+import { Category, Product } from '../models/index.js';
+import { successResponse, errorResponse, paginatedResponse } from '../utils/response.util.js';
+import { Op } from 'sequelize';
 
-const getAllCategories = async (req, res) => {
+export const getAllCategories = async (req, res) => {
   try {
     const {
       page = 1,
@@ -62,7 +62,7 @@ const getAllCategories = async (req, res) => {
   }
 };
 
-const getCategoryById = async (req, res) => {
+export const getCategoryById = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -85,7 +85,7 @@ const getCategoryById = async (req, res) => {
   }
 };
 
-const createCategory = async (req, res) => {
+export const createCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
 
@@ -101,7 +101,7 @@ const createCategory = async (req, res) => {
   }
 };
 
-const updateCategory = async (req, res) => {
+export const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, description, is_active } = req.body;
@@ -125,7 +125,7 @@ const updateCategory = async (req, res) => {
   }
 };
 
-const deleteCategory = async (req, res) => {
+export const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -147,13 +147,5 @@ const deleteCategory = async (req, res) => {
     console.error('Delete category error:', error);
     return errorResponse(res, error.message || 'Failed to delete category');
   }
-};
-
-module.exports = {
-  getAllCategories,
-  getCategoryById,
-  createCategory,
-  updateCategory,
-  deleteCategory
 };
 

@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {
+import {
   generateProductReport,
   downloadSampleTemplate
-} = require('../controllers/report.controller');
-const { authenticate } = require('../middleware/auth.middleware');
+} from '../controllers/report.controller.js';
+import { authenticate } from '../middleware/auth.middleware.js';
 
 // All routes require authentication
 router.use(authenticate);
@@ -13,5 +13,5 @@ router.use(authenticate);
 router.get('/products', generateProductReport);
 router.get('/template', downloadSampleTemplate);
 
-module.exports = router;
+export default router;
 

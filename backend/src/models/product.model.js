@@ -1,6 +1,6 @@
-const { DataTypes } = require('sequelize');
-const { v4: uuidv4 } = require('uuid');
-const sequelize = require('../config/database');
+import { DataTypes } from 'sequelize';
+import { v4 as uuidv4 } from 'uuid';
+import sequelize from '../config/database.js';
 
 const Product = sequelize.define('products', {
   id: {
@@ -71,5 +71,5 @@ const Product = sequelize.define('products', {
   ]
 });
 
-module.exports = Product;
+export default Product;
 

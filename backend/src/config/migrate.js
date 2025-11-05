@@ -1,5 +1,5 @@
-require('dotenv').config();
-const { syncDatabase } = require('../models');
+import 'dotenv/config';
+import { syncDatabase } from '../models/index.js';
 
 const runMigration = async () => {
   console.log('Starting database migration...');

@@ -1,11 +1,21 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const compression = require('compression');
-const morgan = require('morgan');
-const path = require('path');
-const { sequelize } = require('./src/models');
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
+import morgan from 'morgan';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { sequelize } from './src/models/index.js';
+import authRoutes from './src/routes/auth.routes.js';
+import userRoutes from './src/routes/user.routes.js';
+import categoryRoutes from './src/routes/category.routes.js';
+import productRoutes from './src/routes/product.routes.js';
+import reportRoutes from './src/routes/report.routes.js';
+
+// ES6 __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -21,11 +31,11 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
-app.use('/api/auth', require('./src/routes/auth.routes'));
-app.use('/api/users', require('./src/routes/user.routes'));
-app.use('/api/categories', require('./src/routes/category.routes'));
-app.use('/api/products', require('./src/routes/product.routes'));
-app.use('/api/reports', require('./src/routes/report.routes'));
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -69,5 +79,5 @@ sequelize
     process.exit(1);
   });
 
-module.exports = app;
+export default app;
 

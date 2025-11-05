@@ -1,6 +1,6 @@
-const { body } = require('express-validator');
+import { body } from 'express-validator';
 
-const createProductValidator = [
+export const createProductValidator = [
   body('name')
     .trim()
     .notEmpty()
@@ -26,7 +26,7 @@ const createProductValidator = [
     .withMessage('Stock quantity must be a non-negative integer')
 ];
 
-const updateProductValidator = [
+export const updateProductValidator = [
   body('name')
     .optional()
     .trim()
@@ -52,9 +52,4 @@ const updateProductValidator = [
     .isBoolean()
     .withMessage('is_active must be a boolean')
 ];
-
-module.exports = {
-  createProductValidator,
-  updateProductValidator
-};
 

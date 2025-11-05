@@ -1,6 +1,6 @@
-const { body } = require('express-validator');
+import { body } from 'express-validator';
 
-const createCategoryValidator = [
+export const createCategoryValidator = [
   body('name')
     .trim()
     .notEmpty()
@@ -12,7 +12,7 @@ const createCategoryValidator = [
     .trim()
 ];
 
-const updateCategoryValidator = [
+export const updateCategoryValidator = [
   body('name')
     .optional()
     .trim()
@@ -26,9 +26,4 @@ const updateCategoryValidator = [
     .isBoolean()
     .withMessage('is_active must be a boolean')
 ];
-
-module.exports = {
-  createCategoryValidator,
-  updateCategoryValidator
-};
 

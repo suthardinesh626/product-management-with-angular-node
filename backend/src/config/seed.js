@@ -1,5 +1,5 @@
-require('dotenv').config();
-const { User, Category, Product } = require('../models');
+import 'dotenv/config';
+import { User, Category, Product } from '../models/index.js';
 
 const seedDatabase = async () => {
   console.log('Starting database seeding...');

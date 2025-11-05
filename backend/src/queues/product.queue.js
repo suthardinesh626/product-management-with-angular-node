@@ -1,9 +1,9 @@
-const Queue = require('bull');
-const { Product, Category } = require('../models');
-const csv = require('csv-parser');
-const ExcelJS = require('exceljs');
-const fs = require('fs');
-const path = require('path');
+import Queue from 'bull';
+import { Product, Category } from '../models/index.js';
+import csv from 'csv-parser';
+import ExcelJS from 'exceljs';
+import fs from 'fs';
+import path from 'path';
 
 // Create queue
 const uploadProductsQueue = new Queue('product-upload', {
@@ -147,5 +147,5 @@ uploadProductsQueue.on('progress', (job, progress) => {
   console.log(`Job ${job.id} progress: ${progress}%`);
 });
 
-module.exports = { uploadProductsQueue };
+export { uploadProductsQueue };
 
