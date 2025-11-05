@@ -3,7 +3,6 @@ import { Product, Category } from '../models/index.js';
 import csv from 'csv-parser';
 import ExcelJS from 'exceljs';
 import fs from 'fs';
-import path from 'path';
 
 // Create queue
 const uploadProductsQueue = new Queue('product-upload', {
