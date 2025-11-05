@@ -1,13 +1,13 @@
-const { Product, Category } = require('../models');
-const { successResponse, errorResponse, paginatedResponse } = require('../utils/response.util');
-const { Op } = require('sequelize');
-const fs = require('fs');
-const path = require('path');
-const csv = require('csv-parser');
-const ExcelJS = require('exceljs');
-const { uploadProductsQueue } = require('../queues/product.queue');
+import { Product, Category } from '../models/index.js';
+import { successResponse, errorResponse, paginatedResponse } from '../utils/response.util.js';
+import { Op } from 'sequelize';
+import fs from 'fs';
+import path from 'path';
+import csv from 'csv-parser';
+import ExcelJS from 'exceljs';
+import { uploadProductsQueue } from '../queues/product.queue.js';
 
-const getAllProducts = async (req, res) => {
+export const getAllProducts = async (req, res) => {
   try {
     const {
       page = 1,
@@ -90,7 +90,7 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-const getProductById = async (req, res) => {
+export const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -113,7 +113,7 @@ const getProductById = async (req, res) => {
   }
 };
 
-const createProduct = async (req, res) => {
+export const createProduct = async (req, res) => {
   try {
     const { name, description, price, category_id, stock_quantity } = req.body;
 
@@ -155,7 +155,7 @@ const createProduct = async (req, res) => {
   }
 };
 
-const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, description, price, category_id, stock_quantity, is_active } = req.body;
@@ -215,7 +215,7 @@ const updateProduct = async (req, res) => {
   }
 };
 
-const deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -241,7 +241,7 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-const bulkUpload = async (req, res) => {
+export const bulkUpload = async (req, res) => {
   try {
     if (!req.file) {
       return errorResponse(res, 'File is required', 400);
@@ -267,7 +267,7 @@ const bulkUpload = async (req, res) => {
   }
 };
 
-const getBulkUploadStatus = async (req, res) => {
+export const getBulkUploadStatus = async (req, res) => {
   try {
     const { jobId } = req.params;
     const job = await uploadProductsQueue.getJob(jobId);
@@ -292,15 +292,5 @@ const getBulkUploadStatus = async (req, res) => {
     console.error('Get job status error:', error);
     return errorResponse(res, error.message || 'Failed to get job status');
   }
-};
-
-module.exports = {
-  getAllProducts,
-  getProductById,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  bulkUpload,
-  getBulkUploadStatus
 };
 

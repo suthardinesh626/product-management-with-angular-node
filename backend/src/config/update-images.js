@@ -1,5 +1,5 @@
-require('dotenv').config();
-const { Product } = require('../models');
+import 'dotenv/config';
+import { Product } from '../models/index.js';
 
 const updateProductImages = async () => {
   console.log('Updating product images...');

@@ -1,15 +1,15 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {
+import {
   getAllUsers,
   getUserById,
   createUser,
   updateUser,
   deleteUser
-} = require('../controllers/user.controller');
-const { authenticate, authorize } = require('../middleware/auth.middleware');
-const { validate } = require('../middleware/validation.middleware');
-const { registerValidator } = require('../validators/auth.validator');
+} from '../controllers/user.controller.js';
+import { authenticate, authorize } from '../middleware/auth.middleware.js';
+import { validate } from '../middleware/validation.middleware.js';
+import { registerValidator } from '../validators/auth.validator.js';
 
 // All routes require authentication
 router.use(authenticate);
@@ -21,5 +21,5 @@ router.post('/', authorize('admin'), registerValidator, validate, createUser);
 router.put('/:id', authorize('admin'), updateUser);
 router.delete('/:id', authorize('admin'), deleteUser);
 
-module.exports = router;
+export default router;
 

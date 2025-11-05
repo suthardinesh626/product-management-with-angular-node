@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {
+import {
   getAllProducts,
   getProductById,
   createProduct,
@@ -8,14 +8,14 @@ const {
   deleteProduct,
   bulkUpload,
   getBulkUploadStatus
-} = require('../controllers/product.controller');
-const { authenticate } = require('../middleware/auth.middleware');
-const { validate } = require('../middleware/validation.middleware');
-const { uploadImage, uploadBulk } = require('../middleware/upload.middleware');
-const {
+} from '../controllers/product.controller.js';
+import { authenticate } from '../middleware/auth.middleware.js';
+import { validate } from '../middleware/validation.middleware.js';
+import { uploadImage, uploadBulk } from '../middleware/upload.middleware.js';
+import {
   createProductValidator,
   updateProductValidator
-} = require('../validators/product.validator');
+} from '../validators/product.validator.js';
 
 // All routes require authentication
 router.use(authenticate);
@@ -31,5 +31,5 @@ router.delete('/:id', deleteProduct);
 router.post('/bulk/upload', uploadBulk.single('file'), bulkUpload);
 router.get('/bulk/status/:jobId', getBulkUploadStatus);
 
-module.exports = router;
+export default router;
 

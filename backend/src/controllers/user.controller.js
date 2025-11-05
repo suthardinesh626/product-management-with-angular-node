@@ -1,8 +1,8 @@
-const { User } = require('../models');
-const { successResponse, errorResponse, paginatedResponse } = require('../utils/response.util');
-const { Op } = require('sequelize');
+import { User } from '../models/index.js';
+import { successResponse, errorResponse, paginatedResponse } from '../utils/response.util.js';
+import { Op } from 'sequelize';
 
-const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res) => {
   try {
     const {
       page = 1,
@@ -54,7 +54,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-const getUserById = async (req, res) => {
+export const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -70,7 +70,7 @@ const getUserById = async (req, res) => {
   }
 };
 
-const createUser = async (req, res) => {
+export const createUser = async (req, res) => {
   try {
     const { email, password, name, role } = req.body;
 
@@ -95,7 +95,7 @@ const createUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email, role, is_active } = req.body;
@@ -128,7 +128,7 @@ const updateUser = async (req, res) => {
   }
 };
 
-const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -149,13 +149,5 @@ const deleteUser = async (req, res) => {
     console.error('Delete user error:', error);
     return errorResponse(res, error.message || 'Failed to delete user');
   }
-};
-
-module.exports = {
-  getAllUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser
 };
 

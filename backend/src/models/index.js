@@ -1,7 +1,7 @@
-const sequelize = require('../config/database');
-const User = require('./user.model');
-const Category = require('./category.model');
-const Product = require('./product.model');
+import sequelize from '../config/database.js';
+import User from './user.model.js';
+import Category from './category.model.js';
+import Product from './product.model.js';
 
 // Define associations
 Category.hasMany(Product, {
@@ -17,7 +17,7 @@ Product.belongsTo(Category, {
 });
 
 // Sync database
-const syncDatabase = async (options = {}) => {
+export const syncDatabase = async (options = {}) => {
   try {
     await sequelize.sync(options);
     console.log(' Database synced successfully');
@@ -27,11 +27,5 @@ const syncDatabase = async (options = {}) => {
   }
 };
 
-module.exports = {
-  sequelize,
-  User,
-  Category,
-  Product,
-  syncDatabase
-};
+export { sequelize, User, Category, Product };
 

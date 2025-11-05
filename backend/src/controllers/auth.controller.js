@@ -1,8 +1,8 @@
-const { User } = require('../models');
-const { generateToken } = require('../utils/jwt.util');
-const { successResponse, errorResponse } = require('../utils/response.util');
+import { User } from '../models/index.js';
+import { generateToken } from '../utils/jwt.util.js';
+import { successResponse, errorResponse } from '../utils/response.util.js';
 
-const register = async (req, res) => {
+export const register = async (req, res) => {
   try {
     const { email, password, name } = req.body;
 
@@ -32,7 +32,7 @@ const register = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -65,7 +65,7 @@ const login = async (req, res) => {
   }
 };
 
-const getProfile = async (req, res) => {
+export const getProfile = async (req, res) => {
   try {
     return successResponse(res, req.user, 'Profile retrieved successfully');
   } catch (error) {
@@ -74,7 +74,7 @@ const getProfile = async (req, res) => {
   }
 };
 
-const updateProfile = async (req, res) => {
+export const updateProfile = async (req, res) => {
   try {
     const { name, email } = req.body;
     const user = req.user;
@@ -100,7 +100,7 @@ const updateProfile = async (req, res) => {
   }
 };
 
-const changePassword = async (req, res) => {
+export const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
     const user = req.user;
@@ -120,13 +120,5 @@ const changePassword = async (req, res) => {
     console.error('Change password error:', error);
     return errorResponse(res, error.message || 'Failed to change password');
   }
-};
-
-module.exports = {
-  register,
-  login,
-  getProfile,
-  updateProfile,
-  changePassword
 };
 

@@ -1,9 +1,9 @@
-const { Product, Category } = require('../models');
-const { errorResponse } = require('../utils/response.util');
-const ExcelJS = require('exceljs');
-const { Op } = require('sequelize');
+import { Product, Category } from '../models/index.js';
+import { errorResponse } from '../utils/response.util.js';
+import ExcelJS from 'exceljs';
+import { Op } from 'sequelize';
 
-const generateProductReport = async (req, res) => {
+export const generateProductReport = async (req, res) => {
   try {
     const {
       format = 'xlsx',
@@ -151,7 +151,7 @@ const generateProductReport = async (req, res) => {
   }
 };
 
-const downloadSampleTemplate = async (req, res) => {
+export const downloadSampleTemplate = async (req, res) => {
   try {
     const { format = 'xlsx' } = req.query;
 
@@ -243,10 +243,5 @@ const downloadSampleTemplate = async (req, res) => {
       return errorResponse(res, error.message || 'Failed to download template');
     }
   }
-};
-
-module.exports = {
-  generateProductReport,
-  downloadSampleTemplate
 };
 
